@@ -31,6 +31,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       _fontSize = 18;
       heightLine = 200;
     });
+    Navigator.pop(context);
   }
 
   void setTwoImages() {
@@ -39,6 +40,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       _fontSize = 14;
       heightLine = 50;
     });
+    Navigator.pop(context);
   }
 
   void setThreeImages() {
@@ -47,6 +49,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       _fontSize = 10;
       heightLine = 40;
     });
+    Navigator.pop(context);
   }
 
   void setFourImages() {
@@ -55,6 +58,76 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       _fontSize = 8;
       heightLine = 40;
     });
+    Navigator.pop(context);
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0)), //this right here
+          title: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    child: InkWell(
+                      onTap: () => setOneImage(),
+                      child: Icon(
+                        Icons.looks_one,
+                        size: 100,
+                        color: numberInLine == 1 ? Colors.green : Colors.grey,
+                      ),
+                    ),
+                  )),
+                  Expanded(
+                      child: Container(
+                    child: InkWell(
+                      onTap: () => setTwoImages(),
+                      child: Icon(
+                        Icons.looks_two,
+                        size: 100,
+                        color: numberInLine == 2 ? Colors.green : Colors.grey,
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    child: InkWell(
+                      onTap: () => setThreeImages(),
+                      child: Icon(
+                        Icons.looks_3,
+                        size: 100,
+                        color: numberInLine == 3 ? Colors.green : Colors.grey,
+                      ),
+                    ),
+                  )),
+                  Expanded(
+                      child: Container(
+                    child: InkWell(
+                      onTap: () => setFourImages(),
+                      child: Icon(
+                        Icons.looks_4,
+                        size: 100,
+                        color: numberInLine == 4 ? Colors.green : Colors.grey,
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -98,17 +171,20 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
   }
 
   Widget _buildErrorTile() {
-    return Container(
-      child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: Colors.red,
-          ),
-          child: Icon(
-            Icons.arrow_downward,
-            size: 30,
-            color: Colors.white,
+    return InkWell(
+      onTap: () => _onLoadMore(),
+      child: Container(
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: Colors.red,
+            ),
+            child: Icon(
+              Icons.arrow_downward,
+              size: 30,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -232,12 +308,8 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
         title: Text('Pokemon'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add_circle),
-            onPressed: () => model.loadData(),
-          ),
-          IconButton(
             icon: Icon(Icons.apps),
-            onPressed: () => setFourImages(),
+            onPressed: () => _showDialog(),
           )
         ],
       ),

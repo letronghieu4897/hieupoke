@@ -4,6 +4,10 @@ class PokemonService {
     return 'https://pokeres.bastionbot.org/images/pokemon/$id.png';
   }
 
+  String getImageFromId(int id) {
+    return 'https://pokeres.bastionbot.org/images/pokemon/$id.png';
+  }
+
   String getPath(String url) {
     String path = Uri.parse(url).path;
     return path;

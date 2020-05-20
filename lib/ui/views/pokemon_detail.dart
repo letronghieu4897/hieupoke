@@ -5,6 +5,7 @@ import 'package:uichallenge/business_logic/utils/column_builder_util.dart';
 import 'package:uichallenge/business_logic/utils/row_builder_util.dart';
 import 'package:uichallenge/business_logic/view_models/load_pokemon_detail_viewmodel.dart';
 import 'package:uichallenge/services/locator/locator.dart';
+import 'package:uichallenge/ui/views/pokemon_evolution.dart';
 import '../../business_logic/utils/extension_util.dart';
 
 class PokemonDetailScreen extends StatefulWidget {
@@ -154,57 +155,67 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     );
   }
 
-  Widget _buildEvolution() {
-    return Column(
-      children: [
-        Text(
-          'Evolution',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: widget.color,
+  Widget _buildEvolution(LoadPokemonDetailViewModel viewModel) {
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PokemonEvolutionScreen(
+            id: viewModel?.pokemon?.id?.round(),
           ),
         ),
-        SizedBox(height: 16.0),
-        Row(
-          children: <Widget>[
-            Image.asset(
-              'assets/images/gastly.png',
-              width: MediaQuery.of(context).size.width / 6,
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Evolution',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: widget.color,
             ),
-            Expanded(
-              child: Text(
-                'Level \n 25',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: widget.color,
-                ),
-                textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/gastly.png',
+                width: MediaQuery.of(context).size.width / 6,
               ),
-            ),
-            Image.asset(
-              'assets/images/haunter.png',
-              width: MediaQuery.of(context).size.width / 6,
-            ),
-            Expanded(
-              child: Text(
-                'Trade',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: widget.color,
+              Expanded(
+                child: Text(
+                  'Level \n 25',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: widget.color,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            Image.asset(
-              'assets/images/gengar.png',
-              width: MediaQuery.of(context).size.width / 6,
-            ),
-          ],
-        ),
-      ],
+              Image.asset(
+                'assets/images/haunter.png',
+                width: MediaQuery.of(context).size.width / 6,
+              ),
+              Expanded(
+                child: Text(
+                  'Trade',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: widget.color,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Image.asset(
+                'assets/images/gengar.png',
+                width: MediaQuery.of(context).size.width / 6,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -336,7 +347,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                                           SizedBox(height: 16.0),
                                           _buildInfor(),
                                           SizedBox(height: 32.0),
-                                          _buildEvolution(),
+                                          _buildEvolution(model),
                                           SizedBox(height: 32.0),
                                           _buildStats(model),
                                         ],

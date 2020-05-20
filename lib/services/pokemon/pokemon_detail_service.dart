@@ -8,4 +8,9 @@ class PokemonDetailService {
     var res = await _api.get(path: path);
     return res;
   }
+
+  Future<Map<String, dynamic>> loadPokemonEvolution(String path) async {
+    var res = await _api.get(path: path);
+    return res;
+  }
 }

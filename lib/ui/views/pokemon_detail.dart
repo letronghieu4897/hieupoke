@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uichallenge/business_logic/utils/check_data_util.dart';
+import 'package:uichallenge/business_logic/utils/column_builder_util.dart';
+import 'package:uichallenge/business_logic/utils/row_builder_util.dart';
 import 'package:uichallenge/business_logic/view_models/load_pokemon_detail_viewmodel.dart';
 import 'package:uichallenge/services/locator/locator.dart';
 import '../../business_logic/utils/extension_util.dart';
@@ -46,7 +49,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             style: TextStyle(
               color: widget.textColor,
               fontWeight: FontWeight.bold,
-              fontSize: 30,
+              fontSize: 36,
             ),
           ),
           Text(
@@ -54,7 +57,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             style: TextStyle(
               color: widget.textColor,
               fontWeight: FontWeight.bold,
-              fontSize: 12,
+              fontSize: 18,
             ),
           ),
         ],
@@ -75,46 +78,34 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
   }
 
   Widget _buildTypes() {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: Text(
-              'Ghost',
-              style: TextStyle(
-                color: widget.textColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
+    if (!checkListAvailable(model?.pokemon?.types)) {
+      return SizedBox.shrink();
+    }
+    return RowBuilder(
+      itemBuilder: (context, index) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Container(
+              child: Text(
+                model?.pokemon?.types[index]?.type?.name?.capitalize(),
+                style: TextStyle(
+                  color: widget.textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: BorderRadius.circular(100),
+              padding: EdgeInsets.symmetric(vertical: 5.0),
+              decoration: BoxDecoration(
+                color: widget.color,
+                borderRadius: BorderRadius.circular(100),
+              ),
             ),
           ),
-        ),
-        SizedBox(width: 20),
-        Expanded(
-          child: Container(
-            child: Text(
-              'Poison',
-              style: TextStyle(
-                color: widget.textColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            padding: EdgeInsets.symmetric(vertical: 5.0),
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: BorderRadius.circular(100),
-            ),
-          ),
-        ),
-      ],
+        );
+      },
+      itemCount: model?.pokemon?.types?.length,
     );
   }
 
@@ -146,7 +137,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
 
     return Row(
       children: <Widget>[
-        _content('Shadow', 'Species'),
+        _content(model?.pokemon?.species?.name?.capitalize(), 'Species'),
         Container(
           width: 2,
           height: 30,
@@ -217,12 +208,12 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     );
   }
 
-  Widget _buildStats() {
+  Widget _buildStats(LoadPokemonDetailViewModel viewModel) {
     Widget _content(String title, int value) {
       return Row(
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Text(
               title ?? '',
               style: TextStyle(
@@ -246,7 +237,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
           ),
           SizedBox(width: 4.0),
           Container(
-            width: MediaQuery.of(context).size.width * 0.65,
+            width: MediaQuery.of(context).size.width * 0.5,
             height: 8.0,
             decoration: BoxDecoration(
               color: Colors.grey[300],
@@ -264,9 +255,11 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width *
-                      0.65 *
-                      ((100 - value) / 100),
+                  width: value >= 100
+                      ? 0.1
+                      : MediaQuery.of(context).size.width *
+                          0.5 *
+                          ((100 - value) / 100),
                 )
               ],
             ),
@@ -276,6 +269,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     }
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           'Base Stats',
@@ -286,13 +280,18 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
           ),
         ),
         SizedBox(height: 16.0),
-        Column(
-          children: <Widget>[
-            _content('HP', 60),
-            SizedBox(height: 8.0),
-            _content('ATK', 65),
-          ],
-        ),
+        if (viewModel.pokemon?.stats != null && viewModel.pokemon?.stats != [])
+          ColumnBuilder(
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: _content(
+                    viewModel.pokemon?.stats[index]?.stat?.name?.capitalize(),
+                    viewModel.pokemon?.stats[index]?.baseStat),
+              );
+            },
+            itemCount: viewModel.pokemon?.stats?.length,
+          ),
       ],
     );
   }
@@ -339,7 +338,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                                           SizedBox(height: 32.0),
                                           _buildEvolution(),
                                           SizedBox(height: 32.0),
-                                          _buildStats(),
+                                          _buildStats(model),
                                         ],
                                       ),
                                     ),

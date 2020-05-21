@@ -1,10 +1,17 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:uichallenge/services/locator/locator.dart';
 import 'package:uichallenge/ui/views/pokemon_list.dart';
 
 void main() {
   setupServiceLocator();
-  runApp(MyApp());
+  runApp(
+    DevicePreview(
+      enabled: false,
+      builder: (context) => MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,9 +22,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        canvasColor: Color(0xFF6649b7),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: TextTheme(),
+        textTheme: GoogleFonts.bungeeTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
       home: MyHomePage(),
     );

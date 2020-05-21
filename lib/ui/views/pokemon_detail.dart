@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uichallenge/business_logic/utils/check_data_util.dart';
 import 'package:uichallenge/business_logic/utils/column_builder_util.dart';
+import 'package:uichallenge/business_logic/utils/format_util.dart';
 import 'package:uichallenge/business_logic/utils/row_builder_util.dart';
+import 'package:uichallenge/business_logic/utils/scale_text.dart';
 import 'package:uichallenge/business_logic/view_models/load_pokemon_detail_viewmodel.dart';
 import 'package:uichallenge/services/locator/locator.dart';
 import 'package:uichallenge/ui/views/pokemon_evolution.dart';
@@ -50,7 +52,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             style: TextStyle(
               color: widget.textColor,
               fontWeight: FontWeight.bold,
-              fontSize: 36,
+              fontSize: 30,
             ),
           ),
           Text(
@@ -118,7 +120,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             Text(
               title ?? '',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: widget.color,
               ),
@@ -126,7 +128,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             Text(
               content ?? '',
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 8,
                 fontWeight: FontWeight.w500,
                 color: Colors.grey,
               ),
@@ -144,13 +146,16 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
           height: 30,
           color: widget.color,
         ),
-        _content(model?.pokemon?.height.toString(), 'Height'),
+        _content(
+            '${feetToMeter(model?.pokemon?.height)?.toStringAsFixed(2)} cm',
+            'Height'),
         Container(
           width: 2,
           height: 30,
           color: widget.color,
         ),
-        _content('${model?.pokemon?.weight} Ibs', 'Weight'),
+        _content('${lbsToKilo(model?.pokemon?.weight)?.toStringAsFixed(2)} kg',
+            'Weight'),
       ],
     );
   }
@@ -228,7 +233,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             child: Text(
               title ?? '',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 7,
                 fontWeight: FontWeight.w600,
                 color: widget.color,
               ),
@@ -240,7 +245,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             child: Text(
               value?.toString() ?? '',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 9,
                 fontWeight: FontWeight.w600,
                 color: widget.color,
               ),
@@ -309,65 +314,68 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: widget.color,
-      child: ChangeNotifierProvider<LoadPokemonDetailViewModel>(
-        create: (context) => model,
-        child: Consumer<LoadPokemonDetailViewModel>(
-            builder: (context, model, child) {
-          return SafeArea(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                _buildAppBar(),
-                SliverToBoxAdapter(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        _buildName(),
-                        Container(
-                          child: Column(
-                            children: <Widget>[
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(16.0),
-                                        topLeft: Radius.circular(16.0),
+    return WithAdaptiveMediaQuery(
+      child: Material(
+        color: widget.color,
+        child: ChangeNotifierProvider<LoadPokemonDetailViewModel>(
+          create: (context) => model,
+          child: Consumer<LoadPokemonDetailViewModel>(
+              builder: (context, model, child) {
+            return SafeArea(
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  _buildAppBar(),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          _buildName(),
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(16.0),
+                                          topLeft: Radius.circular(16.0),
+                                        ),
+                                      ),
+                                      margin: EdgeInsets.only(top: 150),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            SizedBox(height: 50),
+                                            _buildTypes(),
+                                            SizedBox(height: 16.0),
+                                            _buildInfor(),
+//                                          SizedBox(height: 32.0),
+//                                          _buildEvolution(model),
+                                            SizedBox(height: 32.0),
+                                            _buildStats(model),
+                                            SizedBox(height: 500.0),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    margin: EdgeInsets.only(top: 150),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          SizedBox(height: 50),
-                                          _buildTypes(),
-                                          SizedBox(height: 16.0),
-                                          _buildInfor(),
-                                          SizedBox(height: 32.0),
-                                          _buildEvolution(model),
-                                          SizedBox(height: 32.0),
-                                          _buildStats(model),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  _buildImage(),
-                                ],
-                              ),
-                            ],
+                                    _buildImage(),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        }),
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

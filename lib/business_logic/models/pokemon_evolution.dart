@@ -7,7 +7,7 @@ part 'pokemon_evolution.g.dart';
 @JsonSerializable()
 class PokemonEvolution extends Equatable {
   final int id;
-  final Chain chain;
+  final EvolvesTo chain;
 
   PokemonEvolution({this.id, this.chain});
 
@@ -55,24 +55,4 @@ class EvolutionDetails extends Equatable {
 
   @override
   List<Object> get props => [minLevel];
-}
-
-@JsonSerializable()
-class Chain extends Equatable {
-  @JsonKey(name: 'evolution_details')
-  final List<EvolutionDetails> evolutionDetails;
-  @JsonKey(name: 'evolves_to')
-  final List<EvolvesTo> evolvesTo;
-  @JsonKey(name: 'is_baby')
-  final bool isBaby;
-  final Species species;
-
-  Chain({this.evolutionDetails, this.evolvesTo, this.isBaby, this.species});
-
-  factory Chain.fromJson(Map<String, dynamic> json) => _$ChainFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ChainToJson(this);
-
-  @override
-  List<Object> get props => [evolutionDetails, evolvesTo, isBaby, species];
 }

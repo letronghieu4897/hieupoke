@@ -31,6 +31,21 @@ class _PokemonEvolutionScreenState extends State<PokemonEvolutionScreen> {
 
   List<EvolutionParse> parseEvolution(LoadPokemonEvolutionViewModel viewModel) {
     List<EvolutionParse> evolutions = [];
+    var evo = viewModel?.pokemonEvolution?.chain;
+
+    do {
+      var evoDetails = evo?.evolutionDetails[0];
+
+      evolutions.add(
+        EvolutionParse(
+          name: evo?.species?.name,
+          image: _pokemonService.getImageFromUrl(evo?.species?.url),
+          level: evoDetails == null ? 1 : evoDetails?.minLevel,
+        ),
+      );
+
+      evo = evo?.evolvesTo[0];
+    } while (evo != null && evo?.evolvesTo != []);
 
     if (viewModel?.pokemonEvolution?.chain?.species != null) {
       Species speciesOne = viewModel?.pokemonEvolution?.chain?.species;

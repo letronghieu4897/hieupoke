@@ -146,16 +146,13 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
           height: 30,
           color: widget.color,
         ),
-        _content(
-            '${feetToMeter(model?.pokemon?.height)?.toStringAsFixed(2)} cm',
-            'Height'),
+        _content('${formatHeightWidth(model?.pokemon?.height)} m', 'Height'),
         Container(
           width: 2,
           height: 30,
           color: widget.color,
         ),
-        _content('${lbsToKilo(model?.pokemon?.weight)?.toStringAsFixed(2)} kg',
-            'Weight'),
+        _content('${formatHeightWidth(model?.pokemon?.weight)} kg', 'Weight'),
       ],
     );
   }

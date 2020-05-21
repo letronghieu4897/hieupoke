@@ -1,15 +1,25 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uichallenge/services/locator/locator.dart';
 import 'package:uichallenge/ui/views/pokemon_list.dart';
 
-void main() {
+void main() async {
+  var delegate = await LocalizationDelegate.create(
+      fallbackLocale: 'vi_VN',
+      supportedLocales: [
+        'en_US',
+        'vi_VN',
+      ]);
+
   setupServiceLocator();
   runApp(
     DevicePreview(
       enabled: false,
-      builder: (context) => MyApp(),
+      builder: (context) => LocalizedApp(delegate, MyApp()),
     ),
   );
 }
@@ -17,9 +27,18 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var localizationDelegate = LocalizedApp.of(context).delegate;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        localizationDelegate
+      ],
+      supportedLocales: localizationDelegate.supportedLocales,
+      locale: localizationDelegate.currentLocale,
       theme: ThemeData(
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,

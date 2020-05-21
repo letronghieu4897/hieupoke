@@ -27,6 +27,9 @@ PokemonDetail _$PokemonDetailFromJson(Map<String, dynamic> json) {
     species: json['species'] == null
         ? null
         : Species.fromJson(json['species'] as Map<String, dynamic>),
+    sprites: json['sprites'] == null
+        ? null
+        : Sprites.fromJson(json['sprites'] as Map<String, dynamic>),
     stats: (json['stats'] as List)
         ?.map((e) =>
             e == null ? null : StatList.fromJson(e as Map<String, dynamic>))
@@ -51,6 +54,7 @@ Map<String, dynamic> _$PokemonDetailToJson(PokemonDetail instance) =>
       'name': instance.name,
       'order': instance.order,
       'species': instance.species,
+      'sprites': instance.sprites,
       'stats': instance.stats,
       'types': instance.types,
     };
@@ -172,4 +176,28 @@ TypeList _$TypeListFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$TypeListToJson(TypeList instance) => <String, dynamic>{
       'slot': instance.slot,
       'type': instance.type,
+    };
+
+Sprites _$SpritesFromJson(Map<String, dynamic> json) {
+  return Sprites(
+    backDefault: json['back_default'] as String,
+    backFemale: json['back_female'] as String,
+    backShiny: json['back_shiny'] as String,
+    backShinyFemale: json['back_shiny_female'] as String,
+    frontDefault: json['front_default'] as String,
+    frontFemale: json['front_female'] as String,
+    frontShiny: json['front_shiny'] as String,
+    frontShinyFemale: json['front_shiny_female'] as String,
+  );
+}
+
+Map<String, dynamic> _$SpritesToJson(Sprites instance) => <String, dynamic>{
+      'back_default': instance.backDefault,
+      'back_female': instance.backFemale,
+      'back_shiny': instance.backShiny,
+      'back_shiny_female': instance.backShinyFemale,
+      'front_default': instance.frontDefault,
+      'front_female': instance.frontFemale,
+      'front_shiny': instance.frontShiny,
+      'front_shiny_female': instance.frontShinyFemale,
     };

@@ -140,7 +140,8 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
 
     return Row(
       children: <Widget>[
-        _content(model?.pokemon?.species?.name?.capitalize(), 'Species'),
+        _content(model?.pokemon?.baseExperience?.toString()?.capitalize(),
+            'Base Experience'),
         Container(
           width: 2,
           height: 30,
@@ -293,7 +294,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
           ),
         ),
         SizedBox(height: 16.0),
-        if (viewModel.pokemon?.stats != null && viewModel.pokemon?.stats != [])
+        if (checkListAvailable(viewModel.pokemon?.stats))
           ColumnBuilder(
             itemBuilder: (context, index) {
               return Padding(
@@ -306,6 +307,98 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             itemCount: viewModel.pokemon?.stats?.length,
           ),
       ],
+    );
+  }
+
+  Widget _buildAbility(LoadPokemonDetailViewModel viewModel) {
+    return Column(
+      children: [
+        Text(
+          'Abilities',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: widget.color,
+          ),
+        ),
+        SizedBox(height: 16.0),
+        if (checkListAvailable(viewModel.pokemon?.abilities))
+          RowBuilder(
+            itemBuilder: (context, index) {
+              var abilityRes = viewModel?.pokemon?.abilities[index];
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Container(
+                    child: Text(
+                      abilityRes?.ability?.name?.capitalize(),
+                      style: TextStyle(
+                        color: widget.textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    decoration: BoxDecoration(
+                      color: widget.color,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                ),
+              );
+            },
+            itemCount: model?.pokemon?.types?.length,
+          ),
+      ],
+    );
+  }
+
+  Widget _buildSprites(LoadPokemonDetailViewModel viewModel) {
+    Widget _buildImage(String image) {
+      if (image == null) {
+        return SizedBox.shrink();
+      }
+      return Container(
+        padding: EdgeInsets.all(8.0),
+        width: 60,
+        decoration: BoxDecoration(
+          color: widget.color.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(100),
+          border: Border.all(color: widget.color),
+        ),
+        child: FadeInImage.assetNetwork(
+            width: 50,
+            placeholder: 'assets/images/placeholder.png',
+            image: image),
+      );
+    }
+
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            'Sprites',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: widget.color,
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Wrap(
+            children: [
+              _buildImage(viewModel?.pokemon?.sprites?.frontDefault),
+              SizedBox(width: 8.0),
+              _buildImage(viewModel?.pokemon?.sprites?.backDefault),
+              SizedBox(width: 8.0),
+              _buildImage(viewModel?.pokemon?.sprites?.frontShiny),
+              SizedBox(width: 8.0),
+              _buildImage(viewModel?.pokemon?.sprites?.backShiny),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -353,6 +446,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
 //                                          _buildEvolution(model),
                                             SizedBox(height: 32.0),
                                             _buildStats(model),
+                                            SizedBox(height: 32.0),
+                                            _buildAbility(model),
+                                            SizedBox(height: 32.0),
+                                            _buildSprites(model),
                                             SizedBox(height: 500.0),
                                           ],
                                         ),

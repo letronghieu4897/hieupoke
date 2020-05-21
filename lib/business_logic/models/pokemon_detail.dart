@@ -20,6 +20,7 @@ class PokemonDetail extends Equatable {
   final String name;
   final int order;
   final Species species;
+  final Sprites sprites;
   final List<StatList> stats;
   final List<TypeList> types;
 
@@ -35,6 +36,7 @@ class PokemonDetail extends Equatable {
     this.name,
     this.order,
     this.species,
+    this.sprites,
     this.stats,
     this.types,
   });
@@ -169,4 +171,59 @@ class TypeList extends Equatable {
 
   @override
   List<Object> get props => [slot, type];
+}
+
+@JsonSerializable()
+class Sprites extends Equatable {
+  @JsonKey(name: 'back_default')
+  final String backDefault;
+
+  @JsonKey(name: 'back_female')
+  final String backFemale;
+
+  @JsonKey(name: 'back_shiny')
+  final String backShiny;
+
+  @JsonKey(name: 'back_shiny_female')
+  final String backShinyFemale;
+
+  @JsonKey(name: 'front_default')
+  final String frontDefault;
+
+  @JsonKey(name: 'front_female')
+  final String frontFemale;
+
+  @JsonKey(name: 'front_shiny')
+  final String frontShiny;
+
+  @JsonKey(name: 'front_shiny_female')
+  final String frontShinyFemale;
+
+  Sprites({
+    this.backDefault,
+    this.backFemale,
+    this.backShiny,
+    this.backShinyFemale,
+    this.frontDefault,
+    this.frontFemale,
+    this.frontShiny,
+    this.frontShinyFemale,
+  });
+
+  factory Sprites.fromJson(Map<String, dynamic> json) =>
+      _$SpritesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SpritesToJson(this);
+
+  @override
+  List<Object> get props => [
+        backDefault,
+        backFemale,
+        backShiny,
+        backShinyFemale,
+        frontDefault,
+        frontFemale,
+        frontShiny,
+        frontShinyFemale
+      ];
 }

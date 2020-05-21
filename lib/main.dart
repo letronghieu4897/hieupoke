@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uichallenge/services/locator/locator.dart';
 import 'package:uichallenge/ui/views/pokemon_list.dart';
+import 'package:uichallenge/ui/views/splash.dart';
 
 void main() async {
   var delegate = await LocalizationDelegate.create(
@@ -46,7 +48,12 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: MyHomePage(),
+      home: SplashScreen.navigate(
+        name: 'intro.flr',
+        next: (context) => MyHomePage(),
+        until: () => Future.delayed(Duration(seconds: 5)),
+        startAnimation: '1',
+      ),
     );
   }
 }

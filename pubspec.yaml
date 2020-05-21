@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^1.1.0
   device_preview: ^0.4.5
   flutter_translate: ^1.6.0
+  flare_splash_screen: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -61,8 +62,7 @@ flutter:
   assets:
     - assets/images/
     - assets/i18n/
-
-
+    - intro.flr
   # fonts:
   #   - family: Schyler
   #     fonts:
